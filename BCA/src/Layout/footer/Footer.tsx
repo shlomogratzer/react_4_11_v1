@@ -1,10 +1,12 @@
 import React from 'react'
+// import Styles from '../../App.module.css'
+
 
 const Footer = () => {
   return (
-    <div>
-      <h1>footer</h1>
-    </div>
+    <footer >
+      <p>&copy; {new Date().getFullYear()} Created by shlomo </p>
+    </footer>
   )
 }
 

@@ -1,10 +1,12 @@
-import React from 'react'
+import UserComp from '../../components/userComp/UserComp'
 
 const Main = () => {
+  
+
   return (
-    <div>
-      <h1>Header</h1>
-    </div>
+    <main>
+      <UserComp/>
+    </main>
   )
 }
 
