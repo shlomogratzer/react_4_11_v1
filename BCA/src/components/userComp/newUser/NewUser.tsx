@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 interface PropsTipe{
   username:string
   email:string
@@ -14,6 +15,7 @@ interface PropsFun{
 
 const NewUser = (props: PropsFun) => {
 
+  const navigate = useNavigate()
   const [username,setUsername] = useState('')
   const [email,setEmail] = useState('')
   const [age,setAge] = useState(0)
@@ -26,10 +28,12 @@ const NewUser = (props: PropsFun) => {
       age,
       image
     })
+    navigate('/users')
     setUsername('')
     setEmail('')
     setAge(0)
     setImage('')
+
   }
 
   return (

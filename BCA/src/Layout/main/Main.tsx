@@ -1,11 +1,14 @@
 import UserComp from '../../components/userComp/UserComp'
-
-const Main = () => {
+import { ReactNode } from 'react'
+interface Props{
+  children: ReactNode
+}
+const Main = ({children}: Props) => {
   
 
   return (
     <main>
-      <UserComp/>
+      {children}
     </main>
   )
 }

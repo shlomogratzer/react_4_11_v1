@@ -1,22 +1,19 @@
 import Header from "./header/Header"
 import Main from "./main/Main"
 import Footer from "./footer/Footer"
-import { useState } from "react"
+import { ReactNode } from "react"
 
+interface Props{
+  children: ReactNode
+}
 
+const Layout = ({children}: Props) => {
 
-const Layout = () => {
-  // const user = {
-  //   email:'shlomo@gmail.com',
-  //   username:'slomogratzer',
-  //   age:27
-  // }
-  
   return (
    <>
    <div className="app-container">
     <Header/>
-    <Main />
+    <Main children={children}/>
     <Footer/>
    </div>
    </>

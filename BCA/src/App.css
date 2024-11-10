@@ -155,4 +155,5 @@ button:active {
 }
 .dbtn{
   display: flex;
+  justify-content: space-around;
 }
