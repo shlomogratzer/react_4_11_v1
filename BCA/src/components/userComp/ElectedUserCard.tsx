@@ -1,4 +1,4 @@
-import React from 'react'
+
 interface UserT{
     id?:string
     username:string
@@ -17,7 +17,6 @@ const ElectedUserCard = (props:PropsTipe) => {
       <p>email: {props.user.email}</p>
       <p>age: {props.user.age}</p>
       <img src={props.user.image} alt="" style={{maxWidth:'150px', borderRadius:'8px'}} />
-      
     </div>
     </div>
   )

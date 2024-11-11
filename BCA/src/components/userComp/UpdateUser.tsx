@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { UsersContext } from "../../context/UsersContextProvider";
 
 interface UserT {
   id?: string;
@@ -8,31 +9,40 @@ interface UserT {
   age: number;
   image?: string;
 }
-interface PropsFun {
-  user: UserT;
-  updateUser: (user: UserT) => void;
-  setUser: (user: UserT) => void;
-  setFlag: (s: boolean) => void;
-}
-const UpdateUser = (props: PropsFun) => {
+
+
+const UpdateUser = () => {
+  const usersContext = useContext(UsersContext)
   const {id} = useParams()
   const usersNavigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(18);
-  const [image, setImage] = useState(props.user.image);
+  const [image, setImage] = useState('');
   const [btnStatus, setBtnStatus] = useState<boolean>(false);
 
+  const findUser = () => (usersContext.users.find(user => user.id === id))
   useEffect(() => {
-    setUsername(props.user.username);
-    setEmail(props.user.email);
-    setAge(props.user.age);
+    const user = findUser()
+    if(user){
+    setUsername(user.username);
+    setEmail(user.email);
+    setAge(user.age);
+    if(user.image){
+      setImage(user.image)
+    }
+    }
   }, []);
+  const updateUser = (user: UserT) => {
+    usersContext.setUsers(
+      usersContext.users.map((itemUser) => (itemUser.id === user.id ? user : itemUser))
+    );
+  };
   const handleSubmit = (e: React.FormEvent) => {
     if (btnStatus) {
       e.preventDefault();
-      props.updateUser({
-        id: props.user.id,
+      updateUser({
+        id,
         username,
         email,
         age,
@@ -50,7 +60,7 @@ const UpdateUser = (props: PropsFun) => {
         <input
           name="username"
           type="text"
-          placeholder={props.user.username}
+          placeholder={username}
           onChange={(e) => {
             setUsername(e.target.value);
           }}
@@ -59,7 +69,7 @@ const UpdateUser = (props: PropsFun) => {
         <input
           name="email"
           type="text"
-          placeholder={props.user.email}
+          placeholder={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
@@ -68,7 +78,7 @@ const UpdateUser = (props: PropsFun) => {
         <input
           name="age"
           type="number"
-          placeholder={props.user.age.toString()}
+          placeholder={age.toString()}
           onChange={(e) => {
             setAge(Number(e.target.value));
           }}
@@ -77,7 +87,7 @@ const UpdateUser = (props: PropsFun) => {
         <input
           name="image"
           type="text"
-          placeholder={props.user.image}
+          placeholder={image}
           onChange={(e) => {
             setImage(e.target.value);
           }}

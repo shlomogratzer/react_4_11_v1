@@ -1,11 +1,13 @@
-import NewUser from "./newUser/NewUser";
-import { useEffect, useState, ReactNode } from "react";
+import NewUser from "./NewUser";
+import { useState, useContext } from "react";
 import { v4 } from "uuid";
-import UserCard from "./newUser/UserCard";
-import UpdateUser from "./newUser/UpdateUser";
-import ElectedUsers from "./newUser/ElectedUsers";
+import UserCard from "./UserCard";
+import UpdateUser from "./UpdateUser";
+import ElectedUsers from "./ElectedUsers";
 import { Link, Route, Routes } from "react-router-dom";
 import ErrorPage from "../error/ErrorPage";
+import  { UsersContext } from "../../context/UsersContextProvider";
+import PageHeder from "./PageHeder";
 
 interface UserT {
   id?: string;
@@ -14,78 +16,45 @@ interface UserT {
   age: number;
   image?: string;
 }
-interface Props {
-  children: ReactNode;
-}
+
+
 
 const UserComp = () => {
-  const [users, setUsers] = useState<UserT[]>([]);
-  const [user, setUser] = useState<UserT>();
-  const [flag, setFlag] = useState(false);
-  const [elected, setElected] = useState<UserT>();
 
-  useEffect(() => {
-    fetch("/data.json")
-      .then((res) => res.json())
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("no information", error));
-  }, []);
-
-  const addUser = (newUser: UserT) => {
-    newUser.id = v4();
-    setUsers([...users, newUser]);
-  };
-  const delUser = (id: string) => {
-    setUsers(users.filter((user) => user.id !== id));
-  };
-  const updateUser = (user: UserT) => {
-    setUsers(
-      users.map((itemUser) => (itemUser.id === user.id ? user : itemUser))
-    );
-  };
+  const usersContext = useContext(UsersContext)
 
   return (
     <>
-    <Link to='/users'>Users</Link>
-    <Link to='addUser'>addUser</Link>
-    <Link to='update'>update</Link>
-    <Link to='elected'>elected</Link>
     <div>
       <Routes>
-        <Route path="/addUser" element={<NewUser addNewUserFunc={addUser} />} />
+        <Route path="/addUser" element={<NewUser />} />
         <Route
           path="/"
           element={
+            <>
+            <PageHeder title="All users" subtitle="List of all users"/>
             <div className="card-list">
-              {users.map((user) => {
+              {usersContext.users.map((user) => {
                 return (
                   <UserCard
-                    user={user}
-                    setUser={setUser}
-                    setElected={setElected}
-                    delFunc={delUser}
-                    flag={flag}
-                    setFlag={setFlag}
+                  user={user}
                   />
                 );
               })}
             </div>
+            </>
           }
         />
         <Route
           path="/update/:id"
           element={
             <UpdateUser
-              user={user!}
-              setUser={setUser}
-              setFlag={setFlag}
-              updateUser={updateUser}
             />
           }
         />
         <Route
           path="/elected"
-          element={<ElectedUsers elected={elected} setElected={setElected} />}
+          element={<ElectedUsers/>}
         />
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>

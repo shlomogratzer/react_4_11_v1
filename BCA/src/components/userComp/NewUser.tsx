@@ -1,28 +1,32 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import {v4} from 'uuid'
+import { UsersContext } from "../../context/UsersContextProvider"
 interface PropsTipe{
+  id?:string
   username:string
   email:string
   age:number
   image?:string
-
 }
 
-interface PropsFun{
-  addNewUserFunc :(user:PropsTipe) => void
-}
-
-
-const NewUser = (props: PropsFun) => {
-
+const NewUser = () => {
+  const {users,setUsers} = useContext(UsersContext)
+  
   const navigate = useNavigate()
   const [username,setUsername] = useState('')
   const [email,setEmail] = useState('')
   const [age,setAge] = useState(0)
   const [image,setImage] = useState('')
+
+  const addUser = (newUser: PropsTipe) => {
+    newUser.id = v4();
+    setUsers([...users, newUser]);
+  };
+
   const handleSubmit = (e:React.FormEvent) =>{
     e.preventDefault()
-    props.addNewUserFunc({
+    addUser({
       username,
       email,
       age,

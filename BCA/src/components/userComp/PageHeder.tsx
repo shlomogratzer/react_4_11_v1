@@ -7,7 +7,7 @@ interface Props{
 
 const PageHeder = ({title,subtitle}:Props) => {
   return (
-    <div>
+    <div className='page-heder'>
       <h1>{title}</h1>
       <h2>{subtitle}</h2>
     </div>

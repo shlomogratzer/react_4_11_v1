@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { ElectedContext } from "../../context/UserElectedProvider";
+import { UsersContext } from "../../context/UsersContextProvider";
 
 interface UserT {
   id?: string;
@@ -8,17 +11,18 @@ interface UserT {
   image?: string;
 }
 interface PropsUser {
-  flag: boolean;
-  user: UserT;
-  delFunc: (id: string) => void;
-  setFlag: (status: boolean) => void;
-  setUser: (user: UserT) => void;
-  setElected: (user: UserT) => void;
+  user:UserT
 }
 
 const UserCard = (props: PropsUser) => {
+  const {users, setUsers} = useContext(UsersContext)
+  const {elected,setElected} = useContext(ElectedContext)
   const navigate = useNavigate();
 
+
+  const delUser = (id: string) => {
+    setUsers(users.filter((user) => user.id !== id));
+  };
 
   return (
     <div key={props.user.id} className="card">
@@ -31,13 +35,12 @@ const UserCard = (props: PropsUser) => {
         style={{ maxWidth: "150px", borderRadius: "8px" }}
       />
       <div className="dbtn">
-        <button onClick={() => props.delFunc(props.user.id!)}>
+        <button onClick={() => delUser(props.user.id!)}>
           delete card
         </button>
 
         <button
           onClick={() => {
-            props.setUser(props.user);
             navigate(`update/${props.user.id}`);
           }}
         >
@@ -46,9 +49,15 @@ const UserCard = (props: PropsUser) => {
 
         <button
           onClick={() => {
-            props.setElected(props.user);
+            if (!elected.some(electedUser => electedUser.id === props.user.id)) {
+              setElected([...elected,props.user]);
+              console.log(elected);
+            } else {
+              console.log("User already elected");
+            }
             navigate("elected");
           }}
+          
         >
           election
         </button>
